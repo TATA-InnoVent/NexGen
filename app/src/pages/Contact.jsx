@@ -1,3 +1,6 @@
+'use ai:openai'
+
+
 import React from "react";
 import About from "./About.jsx";
 import { useUserContext } from "./../userContext";

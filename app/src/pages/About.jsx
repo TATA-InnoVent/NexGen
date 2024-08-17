@@ -1,4 +1,5 @@
-'use client'
+'use ai:openai'
+
 
 
 import React, {useState} from 'react'
