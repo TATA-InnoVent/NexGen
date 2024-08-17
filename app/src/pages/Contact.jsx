@@ -1,10 +1,15 @@
 'use ai:openai'
 
 
+import { useUserContext } from "./../userContext.jsx";
+import Heading from "./../components/Heading.jsx";
 import React from "react";
-import About from "./About.jsx";
-import { useUserContext } from "./../userContext";
 import { Link } from "react-router-dom";
+
+
+export const COMPONENT_PROMPT = `
+  Contact
+`
 
 const Contact = () => {
   const { user, updateUser } = useUserContext();
@@ -12,7 +17,7 @@ const Contact = () => {
     <div>
       {user}
       <Link to="/about">About</Link>
-      <About />
+      <Heading />
     </div>
   );
 };

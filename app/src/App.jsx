@@ -1,11 +1,15 @@
 
 
 import { useState } from 'react'
-import './App.css'
+
 import { Link, Route, Routes } from "react-router-dom";
-import About from './pages/About'
-import Contact from "./pages/Contact";
-import { UserProvider } from './userContext';
+import About from './pages/About.jsx'
+import Contact from "./pages/Contact.jsx";
+import { UserProvider } from './userContext.jsx';
+
+export const COMPONENT_PROMPT = `
+  App
+`
 
 function App() {
   const [count, setCount] = useState(0)

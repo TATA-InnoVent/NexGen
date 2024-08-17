@@ -1,5 +1,9 @@
 // userContext.js
 
+export const COMPONENT_PROMPT = `
+  UserContext
+`
+
 import React, { createContext, useContext, useState } from "react";
 
 // Create a new context object

@@ -4,9 +4,11 @@
 
 import React, {useState} from 'react'
 import { Link, Route, Routes } from "react-router-dom";
-import { useUserContext } from "./../userContext";
+import { useUserContext } from "./../userContext.jsx";
 
-  
+export const COMPONENT_PROMPT = `
+  About
+`
 
 const About = () => {
   const { user, updateUser } = useUserContext();
