@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import precinct from "precinct";
+import Config from './parseConfig.js';
 
 
 
@@ -22,19 +23,39 @@ import precinct from "precinct";
 // DONE(need to test more)::TODO: Make the code more robust for handling multiple edge cases
 
 
-// Configuration object for paths
-const config = {
-  basePaths: [
-    path.resolve(__dirname, "../app/src"),
-    path.resolve(__dirname, "../app/src/pages"),
-    path.resolve(__dirname, "../app/src/components"),
-  ],
-};
+function findDirectories(rootDir) {
+    let directories = [];
+    
+    function recurseDirectory(dir) {
+        const items = fs.readdirSync(dir, { withFileTypes: true });
+        for (const item of items) {
+            const fullPath = path.join(dir, item.name);
+            if (item.isDirectory()) {
+                directories.push(fullPath);
+                recurseDirectory(fullPath); // Recurse into subdirectory
+            }
+        }
+    }
+    directories.push(rootDir)
+    recurseDirectory(rootDir);
+    return directories;
+}
+
+
+
+
 
 // Function to check for the directive and return the prompt if found
 const checkForDirective = async (filePath) => {
   const content = await fs.promises.readFile(filePath, 'utf8');
-  const directivePattern = /^'use ai:.*'$/m;
+  const directivePattern = /^'use ai:\[(.*?)\]'$/m;
+
+  let matchTest = content.match(directivePattern)
+  let llm = ""
+  if(matchTest!=null){
+    llm = matchTest[1]
+  }
+  
 
   // Import the COMPONENT_PROMPT if the directive is found
   const { COMPONENT_PROMPT } = await import(filePath);
@@ -42,12 +63,13 @@ const checkForDirective = async (filePath) => {
   return {
     hasDirective: directivePattern.test(content),
     prompt: COMPONENT_PROMPT || "",
+    llm:llm
   };
 };
 
 // Function to perform DFS with branch-specific visited states
 const dfsWithBranchSpecificVisited = async (filePath, depthLimit, branchVisitedMap, promptsByDepth) => {
-  const stack = [{ path: filePath, depth: 0, prompt: "" }];
+  const stack = [{ path: filePath, depth: 0, prompt: "System" }];
 
   while (stack.length > 0) {
     const { path: currentPath, depth, prompt } = stack.pop();
@@ -61,7 +83,7 @@ const dfsWithBranchSpecificVisited = async (filePath, depthLimit, branchVisitedM
     if (depth > depthLimit || depthVisited.has(currentPath)) continue;
     depthVisited.add(currentPath);
 
-    const { hasDirective, prompt: promptText } = await checkForDirective(currentPath);
+    const { hasDirective, prompt: promptText, llm } = await checkForDirective(currentPath);
 
     // Ensure promptsByDepth is initialized for the current depth
     if (!promptsByDepth[depth]) {
@@ -73,16 +95,18 @@ const dfsWithBranchSpecificVisited = async (filePath, depthLimit, branchVisitedM
       promptsByDepth[depth].push({
         path: currentPath,
         directive: hasDirective,
-        prompt: prompt + promptText,
+        prompt: promptText+ prompt,
+        llm:llm
       });
-      console.log(`Depth ${depth}: Found directive in ${currentPath}`);
-      console.log(`Prompt added: ${promptText}`);
+      // console.log(`Depth ${depth}: Found directive in ${currentPath}`);
+      // console.log(`Prompt added: ${promptText}`);
     } else {
       // Always include non-directive files with merged prompt
       promptsByDepth[depth].push({
         path: currentPath,
         directive: hasDirective,
-        prompt: prompt + promptText,
+        prompt: promptText+ prompt,
+        llm:llm
       });
     }
 
@@ -95,11 +119,11 @@ const dfsWithBranchSpecificVisited = async (filePath, depthLimit, branchVisitedM
 
       for (let dep of deps) {
         const resolvedPath = require.resolve(dep, {
-          paths: config.basePaths,
+          paths: allDirectories,
         });
 
         if (!resolvedPath.includes("node_modules")) {
-          stack.push({ path: resolvedPath, depth: depth + 1, prompt: prompt + promptText });
+          stack.push({ path: resolvedPath, depth: depth + 1, prompt: promptText+prompt });
         }
       }
     }
@@ -121,6 +145,7 @@ const iterativeDeepeningDFS = async (filePath, maxDepth) => {
       path: entry.path,
       prompt: entry.prompt,
       directive: entry.directive,
+      llm: entry.llm
     })) || [];
 
     arrOfArrs.push(depthArray);
@@ -129,7 +154,7 @@ const iterativeDeepeningDFS = async (filePath, maxDepth) => {
     // const mergedPromptForDepth = promptsByDepth[depth]?.map(entry => entry.prompt).join("\n") || "";
     // mergedPrompts.push(mergedPromptForDepth);
 
-    console.log(`Depth ${depth}: File paths with directives at this level:`, depthArray);
+    // console.log(`Depth ${depth}: File paths with directives at this level:`, depthArray);
     // console.log(`Depth ${depth}: Merged prompts at this level:`, mergedPromptForDepth);
   }
 
@@ -139,7 +164,9 @@ const iterativeDeepeningDFS = async (filePath, maxDepth) => {
 };
 
 // Starting point for IDDFS traversal
-iterativeDeepeningDFS(path.resolve(__dirname, "../app/src/App.jsx"), 5)
+const allDirectories = findDirectories(path.resolve(Config.baseUrl));
+console.log(allDirectories)
+iterativeDeepeningDFS(path.resolve(Config.baseUrl, Config.entryPoints[0]), Config.depthLimit)
   .then(({ arrOfArrs}) => {
     console.log("Traversal complete.");
   })

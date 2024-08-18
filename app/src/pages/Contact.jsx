@@ -1,4 +1,4 @@
-'use ai:openai'
+'use ai:[openai]'
 
 
 import { useUserContext } from "./../userContext.jsx";

@@ -1,0 +1,18 @@
+{
+    "baseUrl":"./app/src",
+    "paths":[],
+    "entryPoints":["App.jsx"],
+    "depthLimit":5,
+    "extensions":[".js", ".jsx"],
+    "LLMdirectives":[
+        {
+            "name":"openai",
+            "path":"./llm/openai.js"
+        },
+        {
+            "name":"gemini",
+            "path":"./llm/gemini.js"
+        }
+
+    ]
+}
