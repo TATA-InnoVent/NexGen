@@ -1,12 +1,13 @@
 import fs from "fs";
 import path from "path";
 import precinct from "precinct";
-import Config from './parseConfig.js';
+import Config from './config/parseConfig.js';
+import checkDirective from "./checkDirective.js";
 
 // NOT DONE::TODO: Add extension support for the file name eg .jsx, .css, .js, etc
 // Currently we need to specify the extension while importing the files in reactJS
 
-// NOT DONE::TODO: Make a config file to add the paths
+// DONE::TODO: Make a config file to add the paths
 // Create a config file for the paths and also for the LLM support
 // Add multiple options for LLM and file support also think for more options
 
@@ -20,47 +21,12 @@ import Config from './parseConfig.js';
 
 // DONE(need to test more)::TODO: Make the code more robust for handling multiple edge cases
 
-function findDirectories(rootDir) {
-    let directories = [];
-    
-    function recurseDirectory(dir) {
-        const items = fs.readdirSync(dir, { withFileTypes: true });
-        for (const item of items) {
-            const fullPath = path.join(dir, item.name);
-            if (item.isDirectory()) {
-                directories.push(fullPath);
-                recurseDirectory(fullPath);
-            }
-        }
-    }
-    directories.push(rootDir)
-    recurseDirectory(rootDir);
-    return directories;
-}
 
-// Function to check for the directive and return the prompt if found
-const checkForDirective = async (filePath) => {
-  const content = await fs.promises.readFile(filePath, 'utf8');
-  const directivePattern = /^'use ai:\[(.*?)\]'$/m;
 
-  let matchTest = content.match(directivePattern);
-  let directive = "";
-  if (matchTest != null) {
-    directive = matchTest[1];
-  }
 
-  // Import the COMPONENT_PROMPT if the directive is found
-  const { COMPONENT_PROMPT } = await import(filePath);
-
-  return {
-    hasDirective: directivePattern.test(content),
-    prompt: COMPONENT_PROMPT || "",
-    directive: directive
-  };
-};
 
 // Function to perform DFS with branch-specific visited states
-const dfsWithBranchSpecificVisited = async (filePath, depthLimit, branchVisitedMap, promptsByDepth) => {
+const dfsWithBranchSpecificVisited = async (filePath, depthLimit, branchVisitedMap, promptsByDepth, allDirectories) => {
   const stack = [{ path: filePath, depth: 0, context: "System: ", prompt: "" }];
 
   while (stack.length > 0) {
@@ -75,7 +41,7 @@ const dfsWithBranchSpecificVisited = async (filePath, depthLimit, branchVisitedM
     if (depth > depthLimit || depthVisited.has(currentPath)) continue;
     depthVisited.add(currentPath);
 
-    const { hasDirective, prompt: promptText, directive } = await checkForDirective(currentPath);
+    const { hasDirective, prompt: promptText, directive } = await checkDirective(currentPath);
 
     // Ensure promptsByDepth is initialized for the current depth
     if (!promptsByDepth[depth]) {
@@ -117,13 +83,13 @@ const dfsWithBranchSpecificVisited = async (filePath, depthLimit, branchVisitedM
 };
 
 // Iterative Deepening DFS function with branch-specific visited states
-const iterativeDeepeningDFS = async (filePath, maxDepth) => {
+const iterativeDeepeningDFS = async (filePath, maxDepth, allDirectories) => {
   let arrOfArrs = [];
 
   for (let depth = 0; depth <= maxDepth; depth++) {
     const branchVisitedMap = new Map(); // Map to hold visited sets for each depth
     const promptsByDepth = [];
-    await dfsWithBranchSpecificVisited(filePath, depth, branchVisitedMap, promptsByDepth);
+    await dfsWithBranchSpecificVisited(filePath, depth, branchVisitedMap, promptsByDepth, allDirectories);
 
     // Add array of file paths with directives for this depth
     const depthArray = promptsByDepth[depth]?.map(entry => ({
@@ -137,17 +103,13 @@ const iterativeDeepeningDFS = async (filePath, maxDepth) => {
     arrOfArrs.push(depthArray);
   }
 
-  console.log("Final Array of Arrays by Depth:", arrOfArrs);
+  // console.log("Final Array of Arrays by Depth:", arrOfArrs);
   return { arrOfArrs };
 };
 
 // Starting point for IDDFS traversal
-const allDirectories = findDirectories(path.resolve(Config.baseUrl));
-console.log(allDirectories)
-iterativeDeepeningDFS(path.resolve(Config.baseUrl, Config.entryPoints[0]), Config.depthLimit)
-  .then(({ arrOfArrs }) => {
-    console.log("Traversal complete.");
-  })
-  .catch((error) => {
-    console.error("An error occurred during traversal:", error);
-  });
+
+
+
+
+export default iterativeDeepeningDFS;

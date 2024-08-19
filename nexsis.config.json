@@ -4,7 +4,7 @@
     "entryPoints":["App.jsx"],
     "depthLimit":5,
     "extensions":[".js", ".jsx"],
-    "LLMdirectives":[
+    "llmDirectives":[
         {
             "name":"openai",
             "path":"./llm/openai.js"

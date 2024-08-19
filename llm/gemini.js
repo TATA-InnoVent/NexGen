@@ -1,7 +1,7 @@
-const chat = (prompt) =>{
+const chat = (context, prompt) =>{
 
-    output = parse(ans)
-    return output
+    
+    return context+prompt
 }
 
 

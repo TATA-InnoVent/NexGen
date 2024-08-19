@@ -19,4 +19,4 @@ require('@babel/register')({
     ]
 });
 
-require('./esbuild/promptChain.js')
+require('./esbuild/main.js')
