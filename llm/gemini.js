@@ -2,7 +2,7 @@ import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { PromptTemplate } from '@langchain/core/prompts';
 
 // API Key (replace with your actual API key)
-const google_apiKey = "AIzaSyA_Ol54xrXQgdXVO7U8J_jnD1ut2EkdIyw";
+const google_apiKey = " ";
 
 // Initialize the Gemini Pro model with API key
 const geminiLLM = new ChatGoogleGenerativeAI({
