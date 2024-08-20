@@ -1,7 +1,6 @@
 {
   "name": "jits",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -19,6 +18,7 @@
     "@babel/preset-env": "^7.25.3",
     "@babel/preset-react": "^7.24.7",
     "@babel/register": "^7.24.6",
+    "@langchain/google-genai": "^0.0.26",
     "babel-plugin-dynamic-import-node": "^2.3.3",
     "i": "^0.3.7",
     "ignore-styles": "^5.0.1",
@@ -26,5 +26,7 @@
     "precinct": "^12.1.2",
     "react": "^18.3.1",
     "react-router-dom": "^6.26.1"
-  }
+  },
+  "keywords": [],
+  "description": ""
 }
