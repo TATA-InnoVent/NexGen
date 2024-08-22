@@ -12,6 +12,10 @@
         {
             "name":"gemini",
             "path":"./llm/gemini.js"
+        },
+        {
+            "name":"groq",
+            "path":"./llm/groq.js"
         }
 
     ]

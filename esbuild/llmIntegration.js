@@ -1,4 +1,5 @@
 import Config from "./config/parseConfig";
+import structuredOutputExtractor from "./structuredOutputExtractor";
 
 const LLMIntegration = (combinedArray) => {
   combinedArray.forEach((item) => {
@@ -6,16 +7,20 @@ const LLMIntegration = (combinedArray) => {
       const directive = item.directive;
 
       if (directive in Config.llmDirectives) {
-        const llmFunction = Config.llmDirectives[directive].default;
+        const model = Config.llmDirectives[directive].default;
 
         item.llmOutput = new Promise((resolve, reject) => {
           try {
-            const result = llmFunction(item.context, item.prompt);
+            const result = structuredOutputExtractor(model, item.context, item.prompt)
             resolve(result);
           } catch (error) {
             reject(error);
           }
         });
+
+        item.llmOutput.then((data)=>{
+          console.log(data.code)
+        })
       }
     }
   });
