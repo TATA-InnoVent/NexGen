@@ -1,5 +1,6 @@
 import Config from "./config/parseConfig";
 import structuredOutputExtractor from "./structuredOutputExtractor";
+import fs from 'fs'
 
 const LLMIntegration = (combinedArray) => {
   combinedArray.forEach((item) => {
@@ -18,8 +19,16 @@ const LLMIntegration = (combinedArray) => {
           }
         });
 
-        item.llmOutput.then((data)=>{
-          console.log(data.code)
+        item.llmOutput.then(async(data)=>{
+          // console.log(data.code)
+          const {COMPONENT_PROMPT} = await import(item.path)
+
+          let writeData = `'use ai:[${item.directive}]'\n\n\nexport const COMPONENT_PROMPT = \`${COMPONENT_PROMPT}\`\n\n\n${data.code}`
+
+          fs.writeFileSync(item.path, writeData)
+          console.log(`File Write Done\nFile: ${item.path}`)
+
+          
         })
       }
     }

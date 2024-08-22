@@ -1,7 +1,4 @@
-'use ai:[gemini]'
-
-
-
+'use ai:[groq]'
 
 
 export const COMPONENT_PROMPT = `
@@ -13,51 +10,70 @@ export const COMPONENT_PROMPT = `
 `
 
 
-// import React, {useState} from 'react'
-// import { Link, Route, Routes } from "react-router-dom";
-// import { useUserContext } from "./../userContext.jsx";
-
-// const About = () => {
-//   const { user, updateUser } = useUserContext();
-//   const [inputText, setInputText] = useState('')
-//   const handleUpdate = () =>{
-//     updateUser(inputText)
-//     // alert(inputText)
-//   }
-//   return (
-//     <div style={{border:'1px solid black', padding:'10px 10px'}}>
-//     <div>Hello World</div>
-//     <input value={inputText} onChange={(e)=>setInputText(e.target.value)}/>
-//     <br />
-//     <button onClick={handleUpdate}>Alert me</button>
-//     <br/>
-//     <br/>
-//     <Link to={'/Contact'}>Contact</Link>
-//     </div>
-//   )
-// }
-
-// export default About
 import React from 'react';
 
-const About = () => {
+function About() {
   return (
-    <div>
-      <nav style={{ backgroundColor: '#f0f0f0', padding: '20px' }}>
-        <h1 style={{ margin: 0 }}>My Website</h1>
+    <>
+      <nav style={{
+        backgroundColor: '#333',
+        color: '#fff',
+        padding: '1rem',
+        display: 'flex',
+        justifyContent: 'space-between'
+      }}>
+        <h1 style={{
+          margin: 0
+        }}>About Us</h1>
       </nav>
-      <div style={{ display: 'flex', height: 'calc(100vh - 80px)' }}>
-        <div style={{ width: '50%', backgroundImage: 'url("https://via.placeholder.com/500")', backgroundSize: 'cover' }}></div>
-        <div style={{ width: '50%', padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <h2>About Me</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, vitae aliquam nisl nisl vitae nisl.</p>
+      <section style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh'
+      }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'row',
+          width: '100%',
+          height: '100%'
+        }}>
+          <div style={{
+            width: '50%',
+            height: '100%',
+            backgroundImage: 'url(https://picsum.photos/200/300)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}></div>
+          <div style={{
+            width: '50%',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            padding: '2rem'
+          }}>
+            <h2 style={{
+              fontSize: '2rem',
+              marginBottom: '1rem'
+            }}>About Us</h2>
+            <p style={{
+              fontSize: '1.2rem'
+            }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex.</p>
+          </div>
         </div>
-      </div>
-      <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', textAlign: 'center' }}>
-        <p>Copyright &copy; My Website</p>
+      </section>
+      <footer style={{
+        backgroundColor: '#333',
+        color: '#fff',
+        padding: '1rem',
+        textAlign: 'center'
+      }}>
+        2023 About Us
       </footer>
-    </div>
+    </>
   );
-};
+}
 
 export default About;

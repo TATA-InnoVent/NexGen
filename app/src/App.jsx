@@ -1,11 +1,5 @@
-'use ai:[gemini]'
+'use ai:[groq]'
 
-import { useState } from 'react'
-
-import { Link, Route, Routes } from "react-router-dom";
-
-import Contact from "./pages/Contact.jsx";
-import { UserProvider } from './userContext.jsx';
 
 export const COMPONENT_PROMPT = `
   This is the main entrypoint file
@@ -33,41 +27,22 @@ export const COMPONENT_PROMPT = `
 
 `
 
-// function App() {
-//   const [count, setCount] = useState(0)
-
-//   return (
-//     <UserProvider>
-//     <div >
-//       <div style={{border:'1px solid black', padding:'10px 10px', gap:'10px', display:'flex', flexDirection:'column'}}>
-//       <Link to="/contact" >
-//       Contact
-//       </Link>
-//       <Link to="/about">
-//         About
-//       </Link>
-//       </div>
-
-//       <Routes>
-//         <Route path="/contact" element={<Contact />}></Route>
-//         <Route path="/about" element={<About />}></Route>
-//       </Routes>
-//     </div>
-//     </UserProvider>
-//   )
-// }
-
-// export default App
 
 import React from 'react';
 import About from './pages/About';
 
-const App = () => {
+function App() {
   return (
-    <div style={{width:'100vw'}}>
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100vh',
+      backgroundColor: '#f0f0f0'
+    }}>
       <About />
     </div>
   );
-};
+}
 
 export default App;
