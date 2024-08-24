@@ -1,4 +1,5 @@
 import fs from 'fs';
+import Config from './config/parseConfig';
 
 // Function to check for the directive and return the prompt if found
 const checkDirective = async (filePath) => {
@@ -12,11 +13,19 @@ const checkDirective = async (filePath) => {
     }
   
     // Import the COMPONENT_PROMPT if the directive is found
-    const { COMPONENT_PROMPT } = await import(filePath);
+    let prompt = "";
+    if(Config.includeCompleteFileContent == true){
+      prompt = content
+    }
+    else{
+      const {COMPONENT_PROMPT} = await import(filePath);
+      prompt = COMPONENT_PROMPT
+    }
+    
   
     return {
       hasDirective: directivePattern.test(content),
-      prompt: COMPONENT_PROMPT || "",
+      prompt: prompt || "",
       directive: directive
     };
   };

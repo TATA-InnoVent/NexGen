@@ -4,6 +4,7 @@
     "entryPoints":["App.jsx"],
     "depthLimit":5,
     "runOnce":true,
+    "includeCompleteFileContent":false,
     "extensions":[".js", ".jsx"],
     "llmDirectives":[
         {
