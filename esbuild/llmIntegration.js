@@ -22,9 +22,14 @@ const LLMIntegration = (combinedArray) => {
         item.llmOutput.then(async(data)=>{
           // console.log(data.code)
           const {COMPONENT_PROMPT} = await import(item.path)
-
-          let writeData = `'use ai:[${item.directive}]'\n\n\nexport const COMPONENT_PROMPT = \`${COMPONENT_PROMPT}\`\n\n\n${data.code}`
-
+          let writeData = ""
+          if(Config.runOnce==true){
+            writeData = `\n\n\nexport const COMPONENT_PROMPT = \`${COMPONENT_PROMPT}\`\n\n\n${data.code}`
+          }
+          else{
+            writeData = `'use ai:[${item.directive}]'\n\n\nexport const COMPONENT_PROMPT = \`${COMPONENT_PROMPT}\`\n\n\n${data.code}`
+          }
+          
           fs.writeFileSync(item.path, writeData)
           console.log(`File Write Done\nFile: ${item.path}`)
 

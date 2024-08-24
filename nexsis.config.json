@@ -3,6 +3,7 @@
     "paths":[],
     "entryPoints":["App.jsx"],
     "depthLimit":5,
+    "runOnce":true,
     "extensions":[".js", ".jsx"],
     "llmDirectives":[
         {

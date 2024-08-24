@@ -1,4 +1,4 @@
-'use ai:[groq]'
+'use ai:[gemini]'
 
 
 export const COMPONENT_PROMPT = `
@@ -31,18 +31,12 @@ export const COMPONENT_PROMPT = `
 import React from 'react';
 import About from './pages/About';
 
-function App() {
+const App = () => {
   return (
-    <div style={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100vh',
-      backgroundColor: '#f0f0f0'
-    }}>
+    <div style={{width:'100vw'}}>
       <About />
     </div>
   );
-}
+};
 
 export default App;
