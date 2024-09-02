@@ -20,5 +20,10 @@
             "path":"./llm/groq.js"
         }
 
-    ]
+    ],
+    "boilerPlate":{
+        "prompt":"Hello World",
+        "apiUrl":"http://localhost:8000"
+    }
+    
 }

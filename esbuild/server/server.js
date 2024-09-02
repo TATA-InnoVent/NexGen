@@ -1,0 +1,48 @@
+
+
+
+import chokidar from 'chokidar'
+import Config from '../config/parseConfig'
+import path from 'path'
+import fs from 'fs'
+
+
+console.log(path.resolve(__dirname+'/../.'+Config.baseUrl))
+const watcher = chokidar.watch(path.resolve(__dirname+'/../.'+Config.baseUrl),{
+    persistent: true,
+    ignoreInitial: true,
+    ignored: [],
+    ignorePermissionErrors: false,
+    interval: 100,
+    binaryInterval: 300,
+    disableGlobbing: false,
+    enableBinaryInterval: true,
+    useFsEvents: false,
+    usePolling: false,
+    atomic: true,
+    followSymlinks: true,
+    awaitWriteFinish: false
+})
+
+watcher.on('ready',()=>{
+    console.log("I am ready to watch files")
+})
+
+// Whenever file is added
+watcher.on('add',async(path) => {
+    let promptData = Config.boilerPlate.prompt + ' \n FileName : ' + path.replace(/^.*[\\/]/, '')
+    console.log(promptData)
+
+    // TODO: Create a fetch api for the fetching the boilerPlate from the database
+    // TODO: This code is not tested Please test it properly
+
+    const result = await fetch(Config.boilerPlate.apiUrl, {
+        method:'POST',
+        apiKey:'<Enter your API key>',
+        body:promptData
+    })
+
+    fs.writeFileSync(path, result.data)
+})
+
+
