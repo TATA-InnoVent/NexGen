@@ -7,6 +7,9 @@ import path from 'path'
 import fs from 'fs'
 
 
+require('dotenv').config({ path: path.resolve(Config.envFile) })
+
+
 console.log(path.resolve(__dirname+'/../.'+Config.baseUrl))
 const watcher = chokidar.watch(path.resolve(__dirname+'/../.'+Config.baseUrl),{
     persistent: true,

@@ -4,6 +4,9 @@ import findDirectories from "./findDirectories";
 import path from "path";
 import LLMIntegration from "./llmIntegration";
 
+
+require('dotenv').config({ path: path.resolve(Config.envFile) })
+
 const allDirectories = findDirectories(path.resolve(Config.baseUrl));
 console.log(allDirectories);
 
@@ -15,11 +18,7 @@ async function processEntryPoints() {
         Config.depthLimit,
         allDirectories
       );
-
-      // DONE::TODO: Optimize this code from Time complexicty O(n^3) -> O(n)
-      // DONE:: Do this by reducing the arr of arr to a single arr O(n^3) -> O(n^2)
-      // Change the config to make a llmDriecitves to a map where the key is the direcitve O(n^2) -> O(n)
-
+      
       const combinedArray = arrOfArrs.flat().filter(item => item.hasDirective);
       LLMIntegration(combinedArray);
 

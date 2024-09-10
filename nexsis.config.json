@@ -6,6 +6,7 @@
     "runOnce":true,
     "includeCompleteFileContent":false,
     "extensions":[".js", ".jsx"],
+    "envFile":".env.nexsis",
     "llmDirectives":[
         {
             "name":"openai",

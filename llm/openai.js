@@ -1,8 +1,10 @@
-const chat = (context, prompt) =>{
+import { OpenAI } from "@langchain/openai";
 
-    
-    return context+prompt
-}
+const model = new OpenAI({
+  model: "gpt-3.5-turbo-instruct",
+  temperature: 0.9,
+  apiKey: process.env.NEXSIS_OPENAI_API_KEY,
+});
 
 
-export default chat
+export default model
