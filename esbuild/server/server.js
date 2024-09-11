@@ -2,16 +2,17 @@
 
 
 import chokidar from 'chokidar'
-import Config from '../config/parseConfig'
+import Config from '../config/parseConfig.js'
 import path from 'path'
 import fs from 'fs'
+import dotenv from 'dotenv';
 
 
-require('dotenv').config({ path: path.resolve(Config.envFile) })
+dotenv.config({ path: path.resolve(Config.envFile) });
 
 
-console.log(path.resolve(__dirname+'/../.'+Config.baseUrl))
-const watcher = chokidar.watch(path.resolve(__dirname+'/../.'+Config.baseUrl),{
+console.log(path.resolve(path.__dirname+'/../.'+Config.baseUrl))
+const watcher = chokidar.watch(path.resolve(path.__dirname+'/../.'+Config.baseUrl),{
     persistent: true,
     ignoreInitial: true,
     ignored: [],

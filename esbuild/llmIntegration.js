@@ -1,5 +1,5 @@
-import Config from "./config/parseConfig";
-import structuredOutputExtractor from "./structuredOutputExtractor";
+import Config from "./config/parseConfig.js";
+import structuredOutputExtractor from "./structuredOutputExtractor.js";
 import fs from 'fs'
 
 const LLMIntegration = (combinedArray) => {

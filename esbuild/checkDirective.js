@@ -1,5 +1,5 @@
 import fs from 'fs';
-import Config from './config/parseConfig';
+import Config from './config/parseConfig.js';
 
 // Function to check for the directive and return the prompt if found
 const checkDirective = async (filePath) => {

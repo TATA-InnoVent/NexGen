@@ -1,19 +1,13 @@
 #!/usr/bin/env node
 
+// TODO: Find available LLMs and show them using CLI
+// TODO: Show the files which currently have the directives present in them
 
+import readline from 'readline';
+import chalk from 'chalk';
+import { spawn } from 'child_process';
+import boxen from 'boxen';
 
-// TODO: Find avaliable LLMs and show them using cli
-// TODO: Show the files which currently have the directives present in it
-
-const readline = require('readline');
-const chalk = require('chalk');
-const { spawn } = require('child_process');
-
-
-// Dynamically import boxen when needed
-async function loadBoxen() {
-  return await import('boxen');
-}
 
 // Boxen configuration for drawing the box
 const boxenOptions = {
@@ -44,10 +38,8 @@ function generateCode() {
   console.log(chalk.green('Code generated successfully!'));
 }
 
-
 // Function to display help using boxen
 async function showHelp() {
-  const boxen = await loadBoxen();
   const helpText = `
   ${chalk.bold('Help Menu')}
   ${chalk.green('g')} => Generate Code
@@ -56,7 +48,7 @@ async function showHelp() {
   `;
   
   // Display help inside a box
-  console.log(boxen.default(helpText, boxenOptions));
+  console.log(boxen(helpText, boxenOptions));
 }
 
 console.log(chalk.yellow('Welcome to the CLI App!'));
@@ -76,8 +68,6 @@ process.stdin.on('data', (data) => {
       console.log(chalk.red('Invalid option. Press "h" for help.'));
       break;
   }
-
-
 });
 
 rl.on('line', (input) => {

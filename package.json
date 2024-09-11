@@ -2,6 +2,7 @@
   "name": "jits",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node main.js",
     "nexgen": "node index.js",

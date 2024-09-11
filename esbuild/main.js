@@ -1,11 +1,13 @@
-import Config from "./config/parseConfig";
-import iterativeDeepeningDFS from "./promptChain";
-import findDirectories from "./findDirectories";
+import Config from "./config/parseConfig.js";
+import iterativeDeepeningDFS from "./promptChain.js";
+import findDirectories from "./findDirectories.js";
 import path from "path";
-import LLMIntegration from "./llmIntegration";
+import LLMIntegration from "./llmIntegration.js";
+import dotenv from 'dotenv';
 
 
-require('dotenv').config({ path: path.resolve(Config.envFile) })
+dotenv.config({ path: path.resolve(Config.envFile) });
+
 
 const allDirectories = findDirectories(path.resolve(Config.baseUrl));
 console.log(allDirectories);
