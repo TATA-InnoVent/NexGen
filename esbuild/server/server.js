@@ -2,12 +2,13 @@
 
 
 import chokidar from 'chokidar'
-import Config from '../config/parseConfig'
+import Config from '../config/parseConfig.js'
 import path from 'path'
 import fs from 'fs'
+import dotenv from 'dotenv';
 
-
-require('dotenv').config({ path: path.resolve(Config.envFile) })
+// Load environment variables from the .env file
+dotenv.config({ path: path.resolve(Config.envFile) });
 
 
 console.log(path.resolve(__dirname+'/../.'+Config.baseUrl))

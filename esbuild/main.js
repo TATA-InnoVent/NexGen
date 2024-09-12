@@ -1,16 +1,19 @@
-import Config from "./config/parseConfig";
-import iterativeDeepeningDFS from "./promptChain";
-import findDirectories from "./findDirectories";
+import Config from "./config/parseConfig.js";
+import iterativeDeepeningDFS from "./promptChain.js";
+import findDirectories from "./findDirectories.js";
 import path from "path";
-import LLMIntegration from "./llmIntegration";
+import LLMIntegration from "./llmIntegration.js";
+import dotenv from 'dotenv';
+
+// Load environment variables from the .env file
+dotenv.config({ path: path.resolve(Config.envFile) });
 
 
-require('dotenv').config({ path: path.resolve(Config.envFile) })
 
-const allDirectories = findDirectories(path.resolve(Config.baseUrl));
-console.log(allDirectories);
+async function processEntryPoints(sendToLLM=true) {
+  const allDirectories = findDirectories(path.resolve(Config.baseUrl));
+  console.log(allDirectories);
 
-async function processEntryPoints() {
   for (const entryPoint of Config.entryPoints) {
     try {
       const { arrOfArrs } = await iterativeDeepeningDFS(
@@ -20,7 +23,10 @@ async function processEntryPoints() {
       );
       
       const combinedArray = arrOfArrs.flat().filter(item => item.hasDirective);
-      LLMIntegration(combinedArray);
+      if (sendToLLM==true){
+        LLMIntegration(combinedArray);
+      }
+      
 
       console.log("Updated Array:");
       console.log(combinedArray);
@@ -30,4 +36,4 @@ async function processEntryPoints() {
   }
 }
 
-processEntryPoints();
+export default processEntryPoints
