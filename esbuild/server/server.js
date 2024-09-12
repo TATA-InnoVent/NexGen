@@ -33,7 +33,7 @@ watcher.on('ready',()=>{
 
 // Whenever file is added
 watcher.on('add',async(path) => {
-    let promptData = Config.boilerPlate.prompt + ' \n FileName : ' + path.replace(/^.*[\\/]/, '')
+    let promptData = path.replace(/^.*[\\/]/, '').replace(/\.[^/.]+$/, '')
     console.log(promptData)
 
     // TODO: Create a fetch api for the fetching the boilerPlate from the database
@@ -41,11 +41,14 @@ watcher.on('add',async(path) => {
 
     const result = await fetch(Config.boilerPlate.apiUrl, {
         method:'POST',
-        apiKey:'<Enter your API key>',
-        body:promptData
+        body:JSON.stringify({"query_text": promptData}),
+        headers: {
+            'Content-Type': 'application/json',
+        }
     })
-
-    fs.writeFileSync(path, result.data)
+    const code = await result.json()
+    console.log(code)
+    fs.writeFileSync(path, code.component_code)
 })
 
 

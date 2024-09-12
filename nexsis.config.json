@@ -8,23 +8,10 @@
     "extensions":[".js", ".jsx"],
     "envFile":".env.nexsis",
     "llmDirectives":[
-        {
-            "name":"openai",
-            "path":"./llm/openai.js"
-        },
-        {
-            "name":"gemini",
-            "path":"./llm/gemini.js"
-        },
-        {
-            "name":"groq",
-            "path":"./llm/groq.js"
-        }
-
     ],
     "boilerPlate":{
         "prompt":"Hello World",
-        "apiUrl":"http://localhost:8000"
+        "apiUrl":"http://98.70.77.218:8000/retrieve"
     }
     
 }
