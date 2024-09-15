@@ -1,9 +1,10 @@
-import { ChatGroq } from "@langchain/groq";
+import { createOpenAI } from '@ai-sdk/openai';
 
-const model = new ChatGroq({
-  temperature: 0,
-  apiKey: process.env.NEXSIS_GROQ_API_KEY,
-  model: "llama-3.1-70b-versatile",
+const groq = createOpenAI({
+  baseURL: 'https://api.groq.com/openai/v1',
+  apiKey: process.env.NEXSIS_GROQ_API_KEY
 });
+
+const model = groq('llama-3.1-70b-versatile')
 
 export default model;

@@ -1,10 +1,9 @@
-import { OpenAI } from "@langchain/openai";
+import { createAzure } from '@ai-sdk/azure';
 
-const model = new OpenAI({
-  model: "gpt-3.5-turbo-instruct",
-  temperature: 0.9,
+const openai = createAzure({
+  resourceName: 'your-resource-name', // Azure resource name
   apiKey: process.env.NEXSIS_OPENAI_API_KEY,
 });
 
 
-export default model
+export default openai

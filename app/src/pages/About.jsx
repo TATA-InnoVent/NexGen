@@ -1,4 +1,4 @@
-'use ai:[groq]'
+
 
 
 export const COMPONENT_PROMPT = `
@@ -14,30 +14,74 @@ import React from 'react';
 
 function About() {
   return (
-    <>
-      <nav style={{ backgroundColor: '#333', color: '#fff', padding: '1rem', textAlign: 'center' }}>
-        <h1>About Us</h1>
+    <div>
+      {/* Navbar */}
+      <nav style={{
+        backgroundColor: '#333',
+        color: '#fff',
+        padding: '1rem',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }}>
+        <h2 style={{
+          margin: 0
+        }}>About Us</h2>
       </nav>
-      <section style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-        <div style={{ display: 'flex', flexDirection: 'row', width: '100%', height: '50vh' }}>
-          <div style={{ width: '50%', backgroundImage: 'url(https://picsum.photos/200/300)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
-          <div style={{ width: '50%', padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <h2>Welcome to About Us</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex.</p>
+      {/* Hero Section */}
+      <section style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        backgroundColor: '#f0f0f0'
+      }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+          width: '100%',
+          height: '100%'
+        }}>
+          <div style={{
+            width: '50%',
+            height: '100%',
+            backgroundImage: 'url(https://picsum.photos/200/300)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}></div>
+          <div style={{
+            width: '50%',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '2rem'
+          }}>
+            <h2 style={{
+              fontSize: '2rem',
+              marginBottom: '1rem'
+            }}>About Us</h2>
+            <p style={{
+              fontSize: '1.2rem',
+              textAlign: 'center'
+            }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex.</p>
           </div>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'row', width: '100%', height: '50vh' }}>
-          <div style={{ width: '50%', padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <h2>Our Mission</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex.</p>
-          </div>
-          <div style={{ width: '50%', backgroundImage: 'url(https://picsum.photos/200/301)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
         </div>
       </section>
-      <footer style={{ backgroundColor: '#333', color: '#fff', padding: '1rem', textAlign: 'center' }}>
+      {/* Footer */}
+      <footer style={{
+        backgroundColor: '#333',
+        color: '#fff',
+        padding: '1rem',
+        textAlign: 'center'
+      }}>
         <p>&copy; 2023 About Us</p>
       </footer>
-    </>
+    </div>
   );
 }
 

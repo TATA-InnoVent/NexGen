@@ -1,10 +1,10 @@
-import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
+import { createGoogleGenerativeAI } from '@ai-sdk/google';
 
-
-const geminiLLM = new ChatGoogleGenerativeAI({
-  model: "gemini-1.5-pro",
-  temperature: 0.3,
-  apiKey: process.env.NEXSIS_GEMINI_API_KEY,
+const google = createGoogleGenerativeAI({
+  baseURL:"",
+  apiKey:process.env.NEXSIS_GEMINI_API_KEY
 });
 
-  export default geminiLLM
+const model = google("gemini-1.5-pro")
+
+export default model
