@@ -19,7 +19,7 @@ const PrepareConfig = async () => {
             Config.llmDirectives[key] = await import(path.resolve(Config.llmDirectives[key]));
         }
     }
-    console.log(Config.llmDirectives);
+    // console.log(Config.llmDirectives);
 };
 
 PrepareConfig();

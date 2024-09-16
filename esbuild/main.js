@@ -28,8 +28,8 @@ async function processEntryPoints(sendToLLM=true) {
       }
       
 
-      console.log("Updated Array:");
-      console.log(combinedArray);
+      console.log("Code Updated!");
+      // console.log(combinedArray);
     } catch (error) {
       console.error("An error occurred during traversal:", error);
     }
