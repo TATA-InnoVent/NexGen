@@ -12,7 +12,6 @@ dotenv.config({ path: path.resolve(Config.envFile) });
 
 async function processEntryPoints(sendToLLM=true) {
   const allDirectories = findDirectories(path.resolve(Config.baseUrl));
-  console.log(allDirectories);
 
   for (const entryPoint of Config.entryPoints) {
     try {
@@ -26,10 +25,11 @@ async function processEntryPoints(sendToLLM=true) {
       if (sendToLLM==true){
         LLMIntegration(combinedArray);
       }
-      
-
-      console.log("Code Updated!");
-      // console.log(combinedArray);
+      else{
+        for (let i = 0; i < combinedArray.length; i++) {
+          console.log(combinedArray[i].path)
+        }
+      }
     } catch (error) {
       console.error("An error occurred during traversal:", error);
     }

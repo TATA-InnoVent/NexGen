@@ -68,10 +68,10 @@ chokidar.stdout.on('data', (data) => {
 });
 
 // Function to generate code with a spinner
-async function generateCode() {
-  const spinner = createSpinner('Generating Code...');
+async function generateCode(sendToLLM) {
+  const spinner = createSpinner(sendToLLM?'Generating Code...\n':'Files containing Directives...\n');
   try {
-    await processEntryPoints(true);
+    await processEntryPoints(sendToLLM);
     spinner.stop(true);
   } catch (error) {
     spinner.stop(false);
@@ -84,6 +84,7 @@ async function showHelp() {
 
   const helpText = `
   ${chalk.bold('Help Menu')}
+  ${chalk.green('s')} => Show Files
   ${chalk.green('g')} => Generate Code
   ${chalk.green('h')} => Help
   Press ${chalk.green('Ctrl+C')} to exit
@@ -125,7 +126,7 @@ rl.on('line', (data) => {
   const command = data.toString().trim();
   switch (command) {
     case 'g':
-      generateCode();
+      generateCode(true);
       break;
     case 'h':
       showHelp();
