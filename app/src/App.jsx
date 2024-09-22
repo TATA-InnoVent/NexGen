@@ -1,6 +1,5 @@
 
 
-
 export const COMPONENT_PROMPT = `
 This is the main entry point for the website.
 This file imports all the essential components such as Navbar, HeroSection, SearchBar, FeatureCard, HowItWork, and Footer.

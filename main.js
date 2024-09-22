@@ -11,7 +11,7 @@ import dotenv from 'dotenv';
 
 async function checkApiKeys() {
   // Load the .env file
-  const envFilePath = path.resolve(__dirname, '.env.nexsis');
+  const envFilePath = path.resolve(Config.envFile);
   if (!fs.existsSync(envFilePath)) {
     console.log('Error: .env file not found');
     return;
