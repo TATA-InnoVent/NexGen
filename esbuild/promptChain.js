@@ -4,6 +4,9 @@ import precinct from "precinct";
 import Config from './config/parseConfig.js';
 import checkDirective from "./checkDirective.js";
 
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+
 // NOT DONE::TODO: Add extension support for the file name eg .jsx, .css, .js, etc
 // Currently we need to specify the extension while importing the files in reactJS
 
@@ -64,10 +67,14 @@ const dfsWithBranchSpecificVisited = async (filePath, depthLimit, branchVisitedM
         fileSystem: fs,
       });
 
+      console.log(deps)
+
       for (let dep of deps) {
         const resolvedPath = require.resolve(dep, {
           paths: allDirectories,
         });
+
+        console.log(resolvedPath)
 
         if (!resolvedPath.includes("node_modules")) {
           stack.push({ 
