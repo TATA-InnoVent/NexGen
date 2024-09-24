@@ -67,14 +67,13 @@ const dfsWithBranchSpecificVisited = async (filePath, depthLimit, branchVisitedM
         fileSystem: fs,
       });
 
-      console.log(deps)
 
       for (let dep of deps) {
         const resolvedPath = require.resolve(dep, {
           paths: allDirectories,
         });
 
-        console.log(resolvedPath)
+
 
         if (!resolvedPath.includes("node_modules")) {
           stack.push({ 

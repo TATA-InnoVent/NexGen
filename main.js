@@ -60,12 +60,7 @@ function createSpinner(message) {
   };
 }
 
-// Spawn a child process to run `server.js`
-const chokidar = spawn('node', ['server.js']);
 
-chokidar.stdout.on('data', (data) => {
-  console.log(`${chalk.green('Nexai:')} ${data}`);
-});
 
 // Function to generate code with a spinner
 async function generateCode(sendToLLM) {
@@ -116,6 +111,33 @@ async function showHelp() {
 }
 
 console.log(chalk.magenta('Welcome to NexAI!'));
+
+
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Spawn a child process to run `server.js`
+const chokidar = spawn('node', [path.join(__dirname, './esbuild/server/server.js')]);
+
+chokidar.stdout.on('data', (data) => {
+  console.log(`${chalk.green('Nexai:')} ${data}`);
+});
+
+
+// Handle standard error
+chokidar.stderr.on('data', (data) => {
+  console.error(`${chalk.red('Error:')} ${data}`);
+});
+
+// Handle process exit
+chokidar.on('close', (code) => {
+  console.log(`Child process exited with code ${code}`);
+});
+
+
 showHelp();
 checkApiKeys();
 

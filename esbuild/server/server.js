@@ -11,8 +11,8 @@ import dotenv from 'dotenv';
 dotenv.config({ path: path.resolve(Config.envFile) });
 
 
-console.log(path.resolve(__dirname+'/../.'+Config.baseUrl))
-const watcher = chokidar.watch(path.resolve(__dirname+'/../.'+Config.baseUrl),{
+console.log(path.resolve(Config.baseUrl))
+const watcher = chokidar.watch(path.resolve(Config.baseUrl),{
     persistent: true,
     ignoreInitial: true,
     ignored: [],
@@ -48,8 +48,9 @@ watcher.on('add',async(path) => {
         }
     })
     const code = await result.json()
-    console.log(code)
+    // console.log(code)
     fs.writeFileSync(path, code.component_code)
+    console.log(`BoilerPlate Written in ${path}`)
 })
 
 
