@@ -2,6 +2,11 @@
 
 import readline from 'readline';
 import chalk from 'chalk';
+import boxen from 'boxen';
+import ora from 'ora';
+import gradient from 'gradient-string';
+import inquirer from 'inquirer';
+import figlet from 'figlet';
 import { spawn } from 'child_process';
 import processEntryPoints from './lib/main.js';
 import Config from "./lib/config/parseConfig.js";
@@ -9,162 +14,151 @@ import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
 
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Function to check API Keys
 async function checkApiKeys() {
-  // Load the .env file
   const envFilePath = path.resolve(Config.envFile);
   if (!fs.existsSync(envFilePath)) {
-    console.log('Error: .env file not found');
+    console.log(chalk.red('Error: .env file not found.'));
     return;
   }
 
   dotenv.config({ path: envFilePath });
 
   const llmDirectives = Config.llmDirectives;
-  // console.log('print',llmDirectives)
   let hasWarnings = false;
 
-  for(let llm in llmDirectives) {
+  for (let llm in llmDirectives) {
     const envVarName = `NEXSIS_${llm.toUpperCase()}_API_KEY`;
     if (!process.env[envVarName]) {
-      console.log(`${chalk.yellowBright(`Warning: Please add API key for ${llm} (${envVarName}) or remove the path from (nexsis.config.json) file.`)}`);
+      console.log(
+        chalk.yellowBright(
+          `Warning: Please add API key for ${llm} (${envVarName}) or remove the path from (nexsis.config.json) file.`
+        )
+      );
       hasWarnings = true;
     }
-  };
+  }
 
   if (!hasWarnings) {
-    console.log('All API keys are set.');
+    console.log(chalk.green('All API keys are set!'));
   }
 }
 
-// Initialize readline interface
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
-// Function to create a simple spinner
-function createSpinner(message) {
-  const spinnerChars = ['|', '/', '-', '\\'];
-  let index = 0;
-
-  const interval = setInterval(() => {
-    process.stdout.write(`\r${spinnerChars[index]} ${message}`);
-    index = (index + 1) % spinnerChars.length;
-  }, 100);
-
-  return {
-    stop(success = true) {
-      clearInterval(interval);
-      process.stdout.write(`\r${success ? chalk.green('✔') : chalk.red('✖')} ${message}\n`);
-    },
-  };
-}
-
-
-
-// Function to generate code with a spinner
+// Function to create a spinner with `ora`
 async function generateCode(sendToLLM) {
-  const spinner = createSpinner(sendToLLM?'Generating Code...\n':'Files containing Directives...\n');
+  const spinner = ora({
+    text: sendToLLM ? 'Generating code...' : 'Listing files...',
+    color: 'cyan',
+  }).start();
+
   try {
     await processEntryPoints(sendToLLM);
-    spinner.stop(true);
+    spinner.succeed(chalk.green('Operation successful!'));
   } catch (error) {
-    spinner.stop(false);
+    spinner.fail(chalk.red('Error while generating code.'));
     console.error(error);
+  } finally {
+    console.log('\n');
   }
 }
 
-// Function to show help
-async function showHelp() {
+// CLI Welcome Banner with Figlet for bold big text
+console.log(
+  gradient.pastel.multiline(
+    figlet.textSync('NexAI', { horizontalLayout: 'full' })
+  )
+);
 
+// Help box display function
+function displayHelpBox() {
   const helpText = `
-  ${chalk.bold('Help Menu')}
-  ${chalk.green('s')} => Show Files
-  ${chalk.green('g')} => Generate Code
-  ${chalk.green('h')} => Help
-  Press ${chalk.green('Ctrl+C')} to exit
-  `;
+${chalk.bold.green('NexAI CLI Help')}
+  
+${chalk.cyanBright('s')} : Show Files
+${chalk.cyanBright('g')} : Generate Code
+${chalk.cyanBright('h')} : Show Help
+Press ${chalk.yellow('e')} to exit.
+`;
 
-  const width = 28; // Fixed width for the box
-  const topBorder = chalk.green('┌' + '─'.repeat(width - 2) + '┐');
-  const bottomBorder = chalk.green('└' + '─'.repeat(width - 2) + '┘');
-  // const emptyLine = chalk.green('│' + ' '.repeat(width - 2) + '│');
-
-  const formattedLines = helpText.split('\n').map(line => {
-    if (line.includes('Help Menu')) {
-      return chalk.green('│ ') + chalk.bold(line.trim().padEnd(width+5)) + chalk.green(' │');
-    } else if (line.includes('=>')) {
-      const [key, description] = line.split('=>').map(part => part.trim());
-      return chalk.green('│ ') + chalk.green(key.padEnd(2)) + ' => ' + description.padEnd(width - 9) + chalk.green(' │');
-    } else if (line.includes('Ctrl+C')) {
-      return chalk.green('│ ') +'Press ' + chalk.green('Ctrl+C') + ' to exit'.padEnd(width - 16) + chalk.green(' │');
-    } else {
-      return chalk.green('│ ') + line.padEnd(width - 4) + chalk.green(' │');
-    }
+  const boxedHelp = boxen(helpText, {
+    padding: {left: 4, right: 4 },
+    margin: 1,
+    borderStyle: 'round',
+    borderColor: 'blue',
   });
 
-  console.log(topBorder);
-  // console.log(emptyLine);
-  console.log(formattedLines.join('\n'));
-  // console.log(emptyLine);
-  console.log(bottomBorder);
+  console.log(boxedHelp);
 }
 
-console.log(chalk.magenta('Welcome to NexAI!'));
+// Using `inquirer` for better user input handling with options directly
+async function promptUser() {
+  const { command } = await inquirer.prompt([{
+    type: 'input',
+    name: 'command',
+    message: 'Enter a command (type "h" for help):',
+  }]);
 
+  return command.trim();
+}
 
+// Handle user commands based on input
+async function handleCommand(command) {
+  switch (command) {
+    case 'g':
+      await generateCode(true);
+      break;
+    case 's':
+      await generateCode(false);
+      break;
+    case 'h':
+      displayHelpBox();
+      break;
+    case 'e':
+      console.log(chalk.red('Exiting...'));
+      process.exit();
+    default:
+      console.log(chalk.red('Invalid option. Please try again.'));
+      break;
+  }
+}
+
+// Start CLI by checking API keys and showing prompt
+async function startCLI() {
+  await checkApiKeys();
+  await delay(500);
+  
+  // Display help box the first time
+  displayHelpBox();
+  
+  while (true) {
+    const command = await promptUser(); 
+    await handleCommand(command);
+  }
+}
+
+// Launch child process for `server.js`
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Spawn a child process to run `server.js`
-const chokidar = spawn('node', [path.join(__dirname, './lib/server/server.js')]);
+const serverProcess = spawn('node', [path.join(__dirname, './lib/server/server.js')]);
 
-chokidar.stdout.on('data', (data) => {
-  console.log(`${chalk.green('Nexai:')} ${data}`);
+serverProcess.stdout.on('data', (data) => {
+  console.log(`${chalk.green('NexAI:')} ${data}`);
 });
 
-
-// Handle standard error
-chokidar.stderr.on('data', (data) => {
+serverProcess.stderr.on('data', (data) => {
   console.error(`${chalk.red('Error:')} ${data}`);
 });
 
-// Handle process exit
-chokidar.on('close', (code) => {
-  console.log(`Child process exited with code ${code}`);
+serverProcess.on('close', (code) => {
+  console.log(chalk.red(`Child process exited with code ${code}`));
 });
 
-
-showHelp();
-checkApiKeys();
-
-
-// Handle user input
-rl.on('line', (data) => {
-  checkApiKeys();
-  const command = data.toString().trim();
-  switch (command) {
-    case 'g':
-      generateCode(true);
-      break;
-    case 'h':
-      showHelp();
-      break;
-    case 's':
-      generateCode(false);
-      break;
-    default:
-      console.log(chalk.red('Invalid option. Press "h" for help.'));
-      break;
-  }
-});
-
-// Handle process exit
-process.on('SIGINT', () => {
-  console.log(chalk.red('\nExiting...'));
-  rl.close();
-  process.exit();
-});
+// Call startCLI function to initialize
+startCLI();
