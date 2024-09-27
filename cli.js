@@ -3,8 +3,8 @@
 import readline from 'readline';
 import chalk from 'chalk';
 import { spawn } from 'child_process';
-import processEntryPoints from './esbuild/main.js';
-import Config from "./esbuild/config/parseConfig.js";
+import processEntryPoints from './lib/main.js';
+import Config from "./lib/config/parseConfig.js";
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
@@ -120,7 +120,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Spawn a child process to run `server.js`
-const chokidar = spawn('node', [path.join(__dirname, './esbuild/server/server.js')]);
+const chokidar = spawn('node', [path.join(__dirname, './lib/server/server.js')]);
 
 chokidar.stdout.on('data', (data) => {
   console.log(`${chalk.green('Nexai:')} ${data}`);

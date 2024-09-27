@@ -6,24 +6,25 @@
     "runOnce":true,
     "includeCompleteFileContent":false,
     "extensions":[".js", ".jsx"],
-    "envFile":".env.nexsis",
+    "envFile":"./.nexsis/.env.nexsis",
+    "systemPromptFile":"./.nexsis/prompts/system.md",
     "llmDirectives":[
         {
             "name":"openai",
-            "path":"./llm/openai.js"
+            "path":"./.nexsis/llm/openai.js"
         },
         {
             "name":"gemini",
-            "path":"./llm/gemini.js"
+            "path":"./.nexsis/llm/gemini.js"
         },
         {
             "name":"groq",
-            "path":"./llm/groq.js"
+            "path":"./.nexsis/llm/groq.js"
         }
 
     ],
     "boilerPlate":{
-        "prompt":"Hello World",
+        "boilerPlatePromptFile":"./.nexsis/prompts/boilerPlate.md",
         "apiUrl":"http://98.70.77.218:8000/retrieve"
     }
     
