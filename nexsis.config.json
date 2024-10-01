@@ -5,7 +5,7 @@
     "depthLimit":5,
     "runOnce":true,
     "includeCompleteFileContent":false,
-    "extensions":[".js", ".jsx"],
+    "extensions":["js", "jsx"],
     "envFile":"./.nexsis/.env.nexsis",
     "systemPromptFile":"./.nexsis/prompts/system.md",
     "llmDirectives":[
