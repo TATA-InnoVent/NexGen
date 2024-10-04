@@ -1,10 +1,9 @@
 import { transformSync } from '@babel/core';
 import fs from 'fs';
-
+import { fileURLToPath } from 'url';
 // Custom loader to handle .jsx files
 export async function load(url, context, defaultLoad) {
-  const pathname = new URL(url).pathname;
-
+  const pathname = fileURLToPath(url)
   if (pathname.endsWith('.jsx')) {
     const source = fs.readFileSync(pathname, 'utf8');
     

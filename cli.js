@@ -12,6 +12,7 @@ import Config from "./lib/config/parseConfig.js";
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
+import { pathToFileURL } from 'url';
 
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -88,7 +89,7 @@ function createStructure(baseDir, structure) {
 
 // Function to check API Keys
 async function checkApiKeys() {
-  const envFilePath = path.resolve(Config.envFile);
+  const envFilePath = pathToFileURL(path.resolve(Config.envFile));
   if (!fs.existsSync(envFilePath)) {
     console.log(chalk.red('Error: .env file not found.'));
     return;
