@@ -5,9 +5,10 @@
     "depthLimit":5,
     "runOnce":true,
     "includeCompleteFileContent":false,
-    "extensions":[".js", ".jsx"],
+    "extensions":["js", "jsx"],
     "envFile":"./.nexsis/.env.nexsis",
     "systemPromptFile":"./.nexsis/prompts/system.md",
+    
     "llmDirectives":[
         {
             "name":"openai",
@@ -26,6 +27,9 @@
     "boilerPlate":{
         "boilerPlatePromptFile":"./.nexsis/prompts/boilerPlate.md",
         "apiUrl":"http://98.70.77.218:8000/retrieve"
+    },
+    "directoryStructure": {
+        "structureFileUrl": "./.nexsis/directory_structure.txt",
+        "indentationSpaces": 2
     }
-    
 }
