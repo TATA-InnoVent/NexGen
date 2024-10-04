@@ -108,17 +108,17 @@ async function promptUser() {
   return command.trim();
 }
 
-// Prompt user for a directory to create the structure
-async function promptBaseDirectory() {
-  const { baseDir } = await inquirer.prompt([{
-    type: 'input',
-    name: 'baseDir',
-    message: 'Enter the base directory where the structure should be created:',
-    default: process.cwd(), // Default to current working directory
-  }]);
+// // Prompt user for a directory to create the structure
+// async function promptBaseDirectory() {
+//   const { baseDir } = await inquirer.prompt([{
+//     type: 'input',
+//     name: 'baseDir',
+//     message: 'Enter the base directory where the structure should be created:',
+//     default: process.cwd(), // Default to current working directory
+//   }]);
   
-  return baseDir.trim();
-}
+//   return baseDir.trim();
+// }
 
 // Handle user commands based on input
 async function handleCommand(command) {
@@ -134,8 +134,9 @@ async function handleCommand(command) {
       break;
     case 'c':
       try {
-        const baseDir = await promptBaseDirectory();
-        const structure = parseDirectoryStructure('./structure.txt');
+        const baseDir = path.resolve(Config.baseUrl);
+        const structureFilePath = path.resolve(Config.directoryStructure.structureFileUrl);
+        const structure = parseDirectoryStructure(structureFilePath);
         createStructure(baseDir, structure); 
         console.log(chalk.green('Directory structure created successfully!'));
       } catch (error) {
@@ -174,7 +175,7 @@ const __dirname = dirname(__filename);
 const serverProcess = spawn('node', [path.join(__dirname, './lib/server/server.js')]);
 
 serverProcess.stdout.on('data', (data) => {
-  console.log(`${chalk.green('NexAI:')} ${data}`);
+  console.log(`\n${chalk.green('NexAI:')} ${data}`);
 });
 
 serverProcess.stderr.on('data', (data) => {
@@ -185,5 +186,4 @@ serverProcess.on('close', (code) => {
   console.log(chalk.red(`Child process exited with code ${code}`));
 });
 
-// Call startCLI function to initialize
 startCLI();
