@@ -1,0 +1,11 @@
+App.css
+App.jsx
+Card.jsx
+components/
+  Footer.jsx
+  HeroSection.jsx
+  Navbar.jsx
+  SearchBar.jsx
+index.css
+main.jsx
+userContext.jsx

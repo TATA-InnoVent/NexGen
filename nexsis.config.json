@@ -26,6 +26,10 @@
     "boilerPlate":{
         "boilerPlatePromptFile":"./.nexsis/prompts/boilerPlate.md",
         "apiUrl":"http://98.70.77.218:8000/retrieve"
+    },
+    "directoryStructure": {
+        "structureFileUrl": "./.nexsis/directory_structure.txt",
+        "indentationSpaces": 2
     }
     
 }

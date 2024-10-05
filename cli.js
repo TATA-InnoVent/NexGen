@@ -175,17 +175,17 @@ async function promptUser() {
   return command.trim();
 }
 
-// Prompt user for a directory to create the structure
-async function promptBaseDirectory() {
-  const { baseDir } = await inquirer.prompt([{
-    type: 'input',
-    name: 'baseDir',
-    message: 'Enter the base directory where the structure should be created:',
-    default: process.cwd(), // Default to current working directory
-  }]);
+// // Prompt user for a directory to create the structure
+// async function promptBaseDirectory() {
+//   const { baseDir } = await inquirer.prompt([{
+//     type: 'input',
+//     name: 'baseDir',
+//     message: 'Enter the base directory where the structure should be created:',
+//     default: process.cwd(), // Default to current working directory
+//   }]);
   
-  return baseDir.trim();
-}
+//   return baseDir.trim();
+// }
 
 // Handle user commands based on input
 async function handleCommand(command) {
@@ -201,9 +201,10 @@ async function handleCommand(command) {
       break;
     case 'c':
       try {
-        const baseDir = await promptBaseDirectory(); // Get base directory from user
-        const structure = parseDirectoryStructure('./structure.txt'); // Path to the structure file
-        createStructure(baseDir, structure); // Creates structure in the specified directory
+        const baseDir = path.resolve(Config.baseUrl);
+        const structureFilePath = path.resolve(Config.directoryStructure.structureFileUrl);
+        const structure = parseDirectoryStructure(structureFilePath);
+        createStructure(baseDir, structure); 
         console.log(chalk.green('Directory structure created successfully!'));
       } catch (error) {
         console.error(chalk.red('Error creating directory structure:', error.message));
