@@ -15,6 +15,7 @@ import dotenv from 'dotenv';
 import { pathToFileURL, fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { parseDirectoryStructure, createStructure } from './lib/directoryStructure.js';
+import { describe, modify, normal } from './lib/options.js';
 
 
 function delay(ms) {
@@ -85,6 +86,8 @@ ${chalk.bold.green('NexAI CLI Help')}
 ${chalk.cyanBright('s')} : Show Files
 ${chalk.cyanBright('g')} : Generate Code
 ${chalk.cyanBright('c')} : Create Directory Structure
+${chalk.cyanBright('d')} : Describe Prompts
+${chalk.cyanBright('m')} : Modify Prompts
 ${chalk.cyanBright('h')} : Show Help
 Press ${chalk.yellow('e')} to exit.
 `;
@@ -126,10 +129,16 @@ async function promptUser() {
 async function handleCommand(command) {
   switch (command) {
     case 'g':
-      await generateCode(true);
+      await generateCode({sendToLLM: true, options:normal});
       break;
     case 's':
-      await generateCode(false);
+      await generateCode({sendToLLM: false, options:normal});
+      break;
+    case 'd':
+      await generateCode({sendToLLM: true, options:describe});
+      break;
+    case 'm':
+      await generateCode({sendToLLM: true, options:modify});
       break;
     case 'h':
       displayHelpBox();

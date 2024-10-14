@@ -1,65 +1,16 @@
+'use ai:[groq]'
+
+
+/**
+ * The code snippet is structured as a single function, Navbar, which returns a JSX element representing the navigation bar. The navigation bar consists of a heading and an unordered list of links. The code uses inline styles for layout and design purposes. The component is exported as the default export, making it available for use in other parts of the application. The code does not include any state or props, making it a simple presentational component. Potential improvements or modifications could include adding responsiveness, using a CSS framework for styling, or incorporating dynamic data for the links.
+ */
 
 
 
-export const COMPONENT_PROMPT = `
-  This component is responsible for the website's navigation bar.
-  It contains inline CSS only for simplicity and minimal styling.
 
-  {
-  "componentName": "Navbar",
-  "type": "functional",
-  "description": "This component displays the navigation menu with links to different sections.",
-  "imports": [
-    {
-      "module": "React",
-      "import": "import React from 'react';"
-    }
-  ],
-  "structure": [
-    {
-      "tag": "nav",
-      "attributes": {
-        "style": "{ display: 'flex', justifyContent: 'space-between', padding: '10px' }"
-      },
-      "children": [
-        {
-          "tag": "h1",
-          "attributes": {
-            "style": "{ fontSize: '24px' }"
-          },
-          "text": "Home City"
-        },
-        {
-          "tag": "ul",
-          "attributes": {
-            "style": "{ display: 'flex', listStyle: 'none' }"
-          },
-          "children": [
-            {
-              "tag": "li",
-              "attributes": {
-                "style": "{ marginRight: '20px' }"
-              },
-              "text": "About"
-            },
-            {
-              "tag": "li",
-              "attributes": {
-                "style": "{ marginRight: '20px' }"
-              },
-              "text": "Contact"
-            },
-            {
-              "tag": "li",
-              "text": "Services"
-            }
-          ]
-        }
-      ]
-    }
-  ]
-}
-`
+
+
+
 
 
 import React from 'react';
