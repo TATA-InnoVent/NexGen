@@ -1,4 +1,4 @@
-'use ai:[gemini]'
+// 'use ai:[gemini]'
 
 
 /**

@@ -3,7 +3,7 @@
     "paths":[],
     "entryPoints":["App.jsx"],
     "depthLimit":5,
-    "runOnce":true,
+    "runOnce":false,
     "includeCompleteFileContent":false,
     "extensions":["js", "jsx"],
     "envFile":"./.nexsis/.env.nexsis",
