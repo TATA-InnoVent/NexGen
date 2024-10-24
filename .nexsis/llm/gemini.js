@@ -1,7 +1,7 @@
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 
 const google = createGoogleGenerativeAI({
-  baseURL:"",
+  baseURL:"https://generativelanguage.googleapis.com/v1beta",
   apiKey:process.env.NEXSIS_GEMINI_API_KEY
 });
 
