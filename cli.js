@@ -17,6 +17,13 @@ import { dirname } from 'path';
 import { parseDirectoryStructure, createStructure } from './lib/directoryStructure.js';
 import { describe, modify, normal } from './lib/options.js';
 
+import cliProgress from 'cli-progress';
+import EventEmitter from 'events';
+
+
+
+const emmiter = new EventEmitter();
+
 
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -55,16 +62,32 @@ async function checkApiKeys() {
 
 // Function to create a spinner with `ora`
 async function generateCode(sendToLLM) {
-  const spinner = ora({
-    text: sendToLLM ? 'Generating code...' : 'Listing files...',
-    color: 'cyan',
-  }).start();
-
+  // const spinner = ora({
+  //   text: sendToLLM ? 'Generating code...' : 'Listing files...',
+  //   color: 'cyan',
+  // }).start();
+  
+  const progressBar = new cliProgress.SingleBar({stopOnComplete:true}, cliProgress.Presets.shades_classic);
+  
   try {
     await processEntryPoints(sendToLLM);
-    spinner.succeed(chalk.green('Operation successful!'));
+    emmiter.on("progressBar", (item, arr) => {
+      if(item === null){
+        progressBar.start(arr.length, 0);
+      }
+      else{
+        progressBar.increment();
+      
+      }
+      
+    })
+
+    progressBar.on('stop', () => {
+      emmiter.emit('promptUser');
+    })
+    // spinner.succeed(chalk.green('Operation successful!'));
   } catch (error) {
-    spinner.fail(chalk.red('Error while generating code.'));
+    // spinner.fail(chalk.red('Error while generating code.'));
     console.error(error);
   } finally {
     console.log('\n');
@@ -129,19 +152,21 @@ async function promptUser() {
 async function handleCommand(command) {
   switch (command) {
     case 'g':
-      await generateCode({sendToLLM: true, options:normal});
+      await generateCode({sendToLLM: true, options:normal, emmiter:emmiter});
       break;
     case 's':
-      await generateCode({sendToLLM: false, options:normal});
+      await generateCode({sendToLLM: false, options:normal, emmiter:emmiter});
+      emmiter.emit("promptUser");
       break;
     case 'd':
-      await generateCode({sendToLLM: true, options:describe});
+      await generateCode({sendToLLM: true, options:describe, emmiter:emmiter});
       break;
     case 'm':
-      await generateCode({sendToLLM: true, options:modify});
+      await generateCode({sendToLLM: true, options:modify, emmiter:emmiter});
       break;
     case 'h':
       displayHelpBox();
+      emmiter.emit("promptUser");
       break;
     case 'c':
       try {
@@ -153,12 +178,14 @@ async function handleCommand(command) {
       } catch (error) {
         console.error(chalk.red('Error creating directory structure:', error.message));
       }
+      emmiter.emit("promptUser");
       break;
     case 'e':
       console.log(chalk.red('Exiting...'));
       process.exit();
     default:
       console.log(chalk.red('Invalid option. Please try again.'));
+      emmiter.emit("promptUser");
       break;
   }
 }
@@ -170,11 +197,19 @@ async function startCLI() {
   
   // Display help box the first time
   displayHelpBox();
+
   
-  while (true) {
+  
+  
+
+  emmiter.on("promptUser", async()=>{
     const command = await promptUser(); 
     await handleCommand(command);
-  }
+  })
+      
+
+  emmiter.emit("promptUser");
+  
 }
 
 // Launch child process for `server.js`
