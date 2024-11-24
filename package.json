@@ -1,6 +1,6 @@
 {
-  "name": "nexsis",
-  "version": "1.0.0",
+  "name": "nexai",
+  "version": "1.0.1",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -8,14 +8,11 @@
     "chokidar": "node ./lib/server/server.js"
   },
   "bin": {
-    "create-nexsis-app": "./lib/bin/bin.js",
-    "nexsis": "./index.js"
+    "create-nexai-app": "./lib/bin/bin.js",
+    "nexai": "./index.js"
   },
   "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "esbuild": "^0.23.0"
-  },
+  "license": "MIT",
   "dependencies": {
     "@ai-sdk/azure": "^0.0.38",
     "@ai-sdk/google": "^0.0.48",
@@ -38,10 +35,8 @@
     "npm": "^10.8.2",
     "ora": "^8.1.0",
     "precinct": "^12.1.2",
-    "react": "^18.3.1",
-    "react-router-dom": "^6.26.1",
     "resolve": "^1.22.8"
   },
-  "keywords": [],
+  "keywords": ["ai", "automation", "cli", "react"],
   "description": ""
 }
